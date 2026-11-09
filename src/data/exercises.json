@@ -1,0 +1,111 @@
+{
+  "title": "Banco de ejercicios",
+  "intro": "Practica por materia. Intenta resolver cada ejercicio antes de abrir la respuesta.",
+  "subjects": [
+    {
+      "name": "Matemática",
+      "exercises": [
+        {
+          "question": "¿Cuánto vale el límite de (x² − 4)/(x − 2) cuando x → 2?",
+          "options": "a) 0  b) 4  c) No existe",
+          "answer": "Respuesta: b) 4. Factoriza: (x − 2)(x + 2)/(x − 2) = x + 2, y al evaluar en 2 da 4."
+        },
+        {
+          "question": "¿Cuánto vale el límite de 2x + 1 cuando x → 3?",
+          "options": "a) 5  b) 6  c) 7",
+          "answer": "Respuesta: c) 7. La función es continua, así que basta evaluar: 2·3 + 1 = 7."
+        },
+        {
+          "question": "¿Cuál es la derivada de f(x) = x³?",
+          "options": "a) 3x²  b) x²  c) 3x",
+          "answer": "Respuesta: a) 3x². Regla de la potencia: baja el exponente y réstale uno."
+        },
+        {
+          "question": "¿Cuál es la derivada de f(x) = 5x + 2?",
+          "options": "a) 5x  b) 5  c) 2",
+          "answer": "Respuesta: b) 5. La derivada de una recta es su pendiente; la constante 2 se anula."
+        },
+        {
+          "question": "¿Cuál es la integral indefinida de 2x?",
+          "options": "a) x² + C  b) 2x² + C  c) x + C",
+          "answer": "Respuesta: a) x² + C. La derivada de x² es 2x, y siempre se suma la constante C."
+        },
+        {
+          "question": "¿Cuánto vale la integral de x entre 0 y 1?",
+          "options": "a) 1  b) 1/2  c) 2",
+          "answer": "Respuesta: b) 1/2. Una antiderivada es x²/2; evaluada de 0 a 1 da 1/2."
+        }
+      ]
+    },
+    {
+      "name": "Física",
+      "exercises": [
+        {
+          "question": "Un auto va a 20 m/s constantes durante 5 s. ¿Qué distancia recorre?",
+          "options": "a) 100 m  b) 25 m  c) 4 m",
+          "answer": "Respuesta: a) 100 m. En movimiento uniforme, d = v·t = 20 · 5 = 100 m."
+        },
+        {
+          "question": "Un objeto parte del reposo con a = 2 m/s². ¿Qué velocidad tiene a los 3 s?",
+          "options": "a) 5 m/s  b) 6 m/s  c) 9 m/s",
+          "answer": "Respuesta: b) 6 m/s. v = a·t = 2 · 3 = 6 m/s."
+        },
+        {
+          "question": "¿Qué fuerza acelera 3 m/s² a una masa de 4 kg?",
+          "options": "a) 7 N  b) 12 N  c) 1,33 N",
+          "answer": "Respuesta: b) 12 N. F = m·a = 4 · 3 = 12 N."
+        },
+        {
+          "question": "Según la tercera ley de Newton, las fuerzas de acción y reacción tienen…",
+          "options": "a) Igual magnitud y sentido opuesto  b) Igual magnitud y el mismo sentido  c) Distinta magnitud",
+          "answer": "Respuesta: a). Igual magnitud, sentido opuesto y actúan sobre cuerpos distintos."
+        },
+        {
+          "question": "Una fuerza de 10 N empuja un objeto 3 m en su misma dirección. ¿Qué trabajo hace?",
+          "options": "a) 13 J  b) 30 J  c) 3,3 J",
+          "answer": "Respuesta: b) 30 J. W = F·d = 10 · 3 = 30 J."
+        },
+        {
+          "question": "¿Cuál es la energía cinética de 2 kg que se mueven a 3 m/s?",
+          "options": "a) 6 J  b) 9 J  c) 18 J",
+          "answer": "Respuesta: b) 9 J. Ec = ½·m·v² = ½ · 2 · 9 = 9 J."
+        }
+      ]
+    },
+    {
+      "name": "Álgebra Lineal",
+      "exercises": [
+        {
+          "question": "¿Cuál es el determinante de la matriz [[2, 1], [3, 4]]?",
+          "options": "a) 5  b) 11  c) −5",
+          "answer": "Respuesta: a) 5. det = 2·4 − 1·3 = 5."
+        },
+        {
+          "question": "Si multiplicas una matriz 2×3 por una 3×2, el resultado es…",
+          "options": "a) 2×2  b) 3×3  c) No se puede",
+          "answer": "Respuesta: a) 2×2. Coinciden las dimensiones internas."
+        },
+        {
+          "question": "Resuelve: x + y = 5 y x − y = 1.",
+          "options": "a) x = 3, y = 2  b) x = 2, y = 3  c) x = 4, y = 1",
+          "answer": "Respuesta: a). 2x = 6, x = 3; entonces y = 2."
+        },
+        {
+          "question": "Si el determinante de la matriz de coeficientes es distinto de cero, el sistema tiene…",
+          "options": "a) Solución única  b) Infinitas soluciones  c) Ninguna solución",
+          "answer": "Respuesta: a) Solución única. La matriz es invertible."
+        },
+        {
+          "question": "Si v = (1, 2) y w = (3, −1), ¿cuánto es v + w?",
+          "options": "a) (4, 1)  b) (2, 3)  c) (3, −2)",
+          "answer": "Respuesta: a) (4, 1). Se suman componente a componente."
+        },
+        {
+          "question": "¿Cuánto es 2·(1, −3)?",
+          "options": "a) (2, −6)  b) (3, −1)  c) (2, −3)",
+          "answer": "Respuesta: a) (2, −6). El escalar multiplica cada componente."
+        }
+      ]
+    }
+  ]
+}

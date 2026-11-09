@@ -1,0 +1,481 @@
+[
+  {
+    "id": "4fb93cc4-2299-482e-a32c-593810def685",
+    "slug": "algebra-lineal",
+    "title": "Álgebra Lineal: matrices, sistemas y vectores",
+    "details": "Repasa los temas de Álgebra Lineal de la UCC a tu ritmo. Cada tema trae una idea clave y dos ejercicios con su respuesta explicada.",
+    "image": "/img/portada-algebra.jpg",
+    "imageAlt": "Portada morada de Álgebra Lineal con dos vectores que forman un paralelogramo",
+    "price": "Gratis",
+    "selfPaced": true,
+    "badge": {
+      "title": "Álgebra Lineal completada",
+      "description": "Terminaste todos los temas del programa de Álgebra Lineal en Migajeros y Calculados.",
+      "backgroundColor": "#5B21B6",
+      "textColor": "#FFFFFF",
+      "id": "fc7737aa-ec26-4723-bd14-045fa52cd0da"
+    },
+    "sections": [
+      {
+        "title": "Matrices y determinantes",
+        "steps": [
+          {
+            "id": "47416072-7957-4708-9054-d54857423c94",
+            "type": "ARTICLE",
+            "title": "Idea clave: Matrices y determinantes",
+            "paragraphs": [
+              "Dos matrices se pueden multiplicar si el número de columnas de la primera es igual al número de filas de la segunda.",
+              "El resultado tiene las filas de la primera matriz y las columnas de la segunda.",
+              "El determinante de una matriz 2×2 [[a, b], [c, d]] es a·d − b·c."
+            ]
+          },
+          {
+            "id": "66bf712d-398b-4744-b535-25197958874a",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Matrices y determinantes",
+            "paragraphs": [
+              "¿Cuál es el determinante de la matriz [[2, 1], [3, 4]]?",
+              "a) 5",
+              "b) 11",
+              "c) −5",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) 5",
+              "Por qué: det = 2·4 − 1·3 = 8 − 3 = 5."
+            ]
+          },
+          {
+            "id": "6dda899a-e814-4f21-987a-c66e9bdded49",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Matrices y determinantes",
+            "paragraphs": [
+              "Si multiplicas una matriz 2×3 por una 3×2, el resultado es…",
+              "a) 2×2",
+              "b) 3×3",
+              "c) No se puede",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) 2×2",
+              "Por qué: Las dimensiones internas coinciden (3) y el resultado toma las externas: 2×2."
+            ]
+          },
+          {
+            "id": "2f435f34-6476-4b47-90bb-d90b339ccf55",
+            "type": "VIDEO",
+            "title": "Video: el determinante como área",
+            "paragraphs": [
+              "Transcripción del video (sin audio):",
+              "Empezamos con un cuadrado de área 1 formado por los vectores (1, 0) y (0, 1).",
+              "La matriz A = [[2, 1], [1, 2]] transforma el plano y convierte el cuadrado en un paralelogramo.",
+              "El área del paralelogramo es 3, igual a det(A) = 2·2 − 1·1 = 3: el determinante dice cuánto se multiplica el área."
+            ],
+            "video": "/video/determinante.mp4"
+          }
+        ]
+      },
+      {
+        "title": "Sistemas de ecuaciones",
+        "steps": [
+          {
+            "id": "79ca4e7e-7f71-462a-9e7e-087a164be14b",
+            "type": "ARTICLE",
+            "title": "Idea clave: Sistemas de ecuaciones",
+            "paragraphs": [
+              "Un sistema de ecuaciones lineales se puede resolver por sustitución, por eliminación o con matrices.",
+              "Si el determinante de la matriz de coeficientes es distinto de cero, el sistema tiene solución única."
+            ]
+          },
+          {
+            "id": "9e95807c-f61d-49f1-8049-859771017a18",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Sistemas de ecuaciones",
+            "paragraphs": [
+              "Resuelve: x + y = 5 y x − y = 1",
+              "a) x = 3, y = 2",
+              "b) x = 2, y = 3",
+              "c) x = 4, y = 1",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) x = 3, y = 2",
+              "Por qué: Sumando ambas ecuaciones: 2x = 6, x = 3; entonces y = 2."
+            ]
+          },
+          {
+            "id": "ab9775fb-f885-4349-90c2-52862b8db102",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Sistemas de ecuaciones",
+            "paragraphs": [
+              "Si el determinante de la matriz de coeficientes es distinto de cero, el sistema tiene…",
+              "a) Solución única",
+              "b) Infinitas soluciones",
+              "c) Ninguna solución",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) Solución única",
+              "Por qué: Determinante distinto de cero significa matriz invertible y solución única."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Espacios vectoriales",
+        "steps": [
+          {
+            "id": "c35d4aaa-e08e-499f-8bd5-05a7cecfea60",
+            "type": "ARTICLE",
+            "title": "Idea clave: Espacios vectoriales",
+            "paragraphs": [
+              "Los vectores se suman componente a componente.",
+              "Al multiplicar un vector por un escalar, se multiplica cada componente.",
+              "Un espacio vectorial es un conjunto donde estas operaciones cumplen propiedades como la conmutatividad, la asociatividad y la existencia del vector cero."
+            ]
+          },
+          {
+            "id": "f3ec8eeb-6f4b-40d8-beb9-a219720ecdb1",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Espacios vectoriales",
+            "paragraphs": [
+              "Si v = (1, 2) y w = (3, −1), ¿cuánto es v + w?",
+              "a) (4, 1)",
+              "b) (2, 3)",
+              "c) (3, −2)",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) (4, 1)",
+              "Por qué: Se suman componente a componente: (1 + 3, 2 − 1) = (4, 1)."
+            ]
+          },
+          {
+            "id": "f6563f07-312d-44fb-ab7a-be5e2aacf34d",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Espacios vectoriales",
+            "paragraphs": [
+              "¿Cuánto es 2·(1, −3)?",
+              "a) (2, −6)",
+              "b) (3, −1)",
+              "c) (2, −3)",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) (2, −6)",
+              "Por qué: El escalar multiplica cada componente: (2·1, 2·(−3)) = (2, −6)."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "d6b8e445-ccbe-4226-a79b-35130fa6a897",
+    "slug": "fisica",
+    "title": "Física: cinemática, leyes de Newton y energía",
+    "details": "Repasa los temas de Física de la UCC a tu ritmo. Cada tema trae una idea clave y dos ejercicios con su respuesta explicada.",
+    "image": "/img/portada-fisica.jpg",
+    "imageAlt": "Portada verde azulada de Física con una esfera que acelera y la fórmula F = m·a",
+    "price": "Gratis",
+    "selfPaced": true,
+    "badge": {
+      "title": "Física completada",
+      "description": "Terminaste todos los temas del programa de Física en Migajeros y Calculados.",
+      "backgroundColor": "#115E59",
+      "textColor": "#FFFFFF",
+      "id": "8b019b89-dacd-4812-9ae6-43bbad93df34"
+    },
+    "sections": [
+      {
+        "title": "Cinemática",
+        "steps": [
+          {
+            "id": "20d8a5cc-5cf3-4c9c-b8dc-d35821ef1749",
+            "type": "ARTICLE",
+            "title": "Idea clave: Cinemática",
+            "paragraphs": [
+              "En el movimiento uniforme la velocidad es constante y la distancia es d = v·t.",
+              "En el movimiento uniformemente acelerado, v = v₀ + a·t y x = v₀·t + ½·a·t².",
+              "La aceleración mide cuánto cambia la velocidad cada segundo."
+            ]
+          },
+          {
+            "id": "7cce25fe-264f-46db-85e5-14b4da71d5be",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Cinemática",
+            "paragraphs": [
+              "Un auto va a 20 m/s constantes durante 5 s. ¿Qué distancia recorre?",
+              "a) 100 m",
+              "b) 25 m",
+              "c) 4 m",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) 100 m",
+              "Por qué: En movimiento uniforme, d = v·t = 20 · 5 = 100 m."
+            ]
+          },
+          {
+            "id": "7d495d14-2edc-482c-8015-ba4996e39cb1",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Cinemática",
+            "paragraphs": [
+              "Un objeto parte del reposo con a = 2 m/s². ¿Qué velocidad tiene a los 3 s?",
+              "a) 5 m/s",
+              "b) 6 m/s",
+              "c) 9 m/s",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 6 m/s",
+              "Por qué: v = a·t = 2 · 3 = 6 m/s."
+            ]
+          },
+          {
+            "id": "8d0d72bd-8d3c-45b9-a193-9cbfe1c5dfc5",
+            "type": "VIDEO",
+            "title": "Video: movimiento uniformemente acelerado",
+            "paragraphs": [
+              "Transcripción del video (sin audio):",
+              "Un objeto parte del reposo con aceleración constante a = 2 m/s². Cada segundo su velocidad aumenta 2 m/s.",
+              "Sus posiciones a 1, 2, 3, 4 y 5 segundos son 1, 4, 9, 16 y 25 m: la distancia entre posiciones crece cada segundo.",
+              "Con v = a·t y x = ½·a·t², a los 5 s la velocidad es 10 m/s y la posición 25 m. La gráfica v–t es una recta cuya pendiente es la aceleración."
+            ],
+            "video": "/video/mrua.mp4"
+          }
+        ]
+      },
+      {
+        "title": "Leyes de Newton",
+        "steps": [
+          {
+            "id": "89cb3116-4f3d-40c8-a035-a0031b48431f",
+            "type": "ARTICLE",
+            "title": "Idea clave: Leyes de Newton",
+            "paragraphs": [
+              "Primera ley: si la fuerza neta es cero, un cuerpo mantiene su reposo o su movimiento uniforme.",
+              "Segunda ley: F = m·a.",
+              "Tercera ley: a toda acción corresponde una reacción de igual magnitud y sentido opuesto, aplicada sobre el otro cuerpo."
+            ]
+          },
+          {
+            "id": "9118bd7d-1c4b-44d9-bf38-cd048cd3736a",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Leyes de Newton",
+            "paragraphs": [
+              "¿Qué fuerza acelera 3 m/s² a una masa de 4 kg?",
+              "a) 7 N",
+              "b) 12 N",
+              "c) 1,33 N",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 12 N",
+              "Por qué: Segunda ley de Newton: F = m·a = 4 · 3 = 12 N."
+            ]
+          },
+          {
+            "id": "94bfe6ea-a984-448c-8f43-0ee553d4c34b",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Leyes de Newton",
+            "paragraphs": [
+              "Según la tercera ley, las fuerzas de acción y reacción tienen…",
+              "a) Igual magnitud y sentido opuesto",
+              "b) Igual magnitud y el mismo sentido",
+              "c) Distinta magnitud",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) Igual magnitud y sentido opuesto",
+              "Por qué: Son de igual magnitud, sentido opuesto y actúan sobre cuerpos distintos."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Trabajo y energía",
+        "steps": [
+          {
+            "id": "a87ba75f-538b-4c1b-bd7c-aa5bddfeaaef",
+            "type": "ARTICLE",
+            "title": "Idea clave: Trabajo y energía",
+            "paragraphs": [
+              "El trabajo de una fuerza constante paralela al desplazamiento es W = F·d y se mide en julios (J).",
+              "La energía cinética es Ec = ½·m·v².",
+              "Teorema trabajo-energía: el trabajo neto sobre un cuerpo es igual al cambio de su energía cinética."
+            ]
+          },
+          {
+            "id": "ce2bc38b-96bf-4b18-b715-68032f97ee88",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Trabajo y energía",
+            "paragraphs": [
+              "Una fuerza de 10 N empuja un objeto 3 m en su misma dirección. ¿Qué trabajo hace?",
+              "a) 13 J",
+              "b) 30 J",
+              "c) 3,3 J",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 30 J",
+              "Por qué: W = F·d = 10 · 3 = 30 J."
+            ]
+          },
+          {
+            "id": "fc6b6248-e0d4-4479-b3d1-d44edae7fbd6",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Trabajo y energía",
+            "paragraphs": [
+              "¿Cuál es la energía cinética de 2 kg que se mueven a 3 m/s?",
+              "a) 6 J",
+              "b) 9 J",
+              "c) 18 J",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 9 J",
+              "Por qué: Ec = ½·m·v² = ½ · 2 · 9 = 9 J."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "6dd527ee-2e69-459e-95e8-a120a31d1639",
+    "slug": "matematica",
+    "title": "Matemática: límites, derivadas e integrales",
+    "details": "Repasa los temas de Matemática de la UCC a tu ritmo. Cada tema trae una idea clave y dos ejercicios con su respuesta explicada.",
+    "image": "/img/portada-matematica.jpg",
+    "imageAlt": "Portada azul de Matemática con una parábola y su recta tangente",
+    "price": "Gratis",
+    "selfPaced": true,
+    "badge": {
+      "title": "Matemática completada",
+      "description": "Terminaste todos los temas del programa de Matemática en Migajeros y Calculados.",
+      "backgroundColor": "#1E40AF",
+      "textColor": "#FFFFFF",
+      "id": "d9c7a56f-995f-481f-8539-862fd5ecd13b"
+    },
+    "sections": [
+      {
+        "title": "Límites y continuidad",
+        "steps": [
+          {
+            "id": "03928078-8e97-4ffa-ad57-565eec81d05c",
+            "type": "ARTICLE",
+            "title": "Idea clave: Límites y continuidad",
+            "paragraphs": [
+              "El límite describe a qué valor se acerca f(x) cuando x se aproxima a un número a.",
+              "Una función es continua en a si f(a) existe, el límite existe y ambos valores coinciden.",
+              "Si al evaluar aparece 0/0, intenta factorizar y simplificar antes de evaluar."
+            ]
+          },
+          {
+            "id": "60fed17b-61fd-41fb-b8ff-4e5136941602",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Límites y continuidad",
+            "paragraphs": [
+              "¿Cuánto vale el límite de (x² − 4)/(x − 2) cuando x → 2?",
+              "a) 0",
+              "b) 4",
+              "c) No existe",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 4",
+              "Por qué: Factoriza: (x − 2)(x + 2)/(x − 2) = x + 2, y al evaluar en 2 da 4."
+            ]
+          },
+          {
+            "id": "762f6de3-6c98-40dc-a9ce-bb51147fc92b",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Límites y continuidad",
+            "paragraphs": [
+              "¿Cuánto vale el límite de 2x + 1 cuando x → 3?",
+              "a) 5",
+              "b) 6",
+              "c) 7",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: c) 7",
+              "Por qué: La función es continua, así que basta evaluar: 2·3 + 1 = 7."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Derivadas",
+        "steps": [
+          {
+            "id": "81e01db4-7ea8-4e9e-846f-2c8f37dd07ac",
+            "type": "ARTICLE",
+            "title": "Idea clave: Derivadas",
+            "paragraphs": [
+              "La derivada f′(a) es la pendiente de la recta tangente a la curva en x = a.",
+              "Se define como el límite de [f(a + h) − f(a)]/h cuando h → 0.",
+              "Regla de la potencia: la derivada de xⁿ es n·xⁿ⁻¹. La derivada de una constante es 0."
+            ]
+          },
+          {
+            "id": "b20e5c60-2a47-4a38-9630-70693968e4f5",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Derivadas",
+            "paragraphs": [
+              "¿Cuál es la derivada de f(x) = x³?",
+              "a) 3x²",
+              "b) x²",
+              "c) 3x",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) 3x²",
+              "Por qué: Regla de la potencia: baja el exponente y réstale uno: 3x²."
+            ]
+          },
+          {
+            "id": "b6abd03f-1cab-4511-a017-8273bd91d9bb",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Derivadas",
+            "paragraphs": [
+              "¿Cuál es la derivada de f(x) = 5x + 2?",
+              "a) 5x",
+              "b) 5",
+              "c) 2",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 5",
+              "Por qué: La derivada de una recta es su pendiente; la constante 2 se anula."
+            ]
+          },
+          {
+            "id": "dad359b9-0c60-4315-b5fc-ac720b106529",
+            "type": "VIDEO",
+            "title": "Video: la derivada como pendiente",
+            "paragraphs": [
+              "Transcripción del video (sin audio):",
+              "Tomamos f(x) = x² y el punto P = (1, 1). Trazamos la recta secante entre P y otro punto Q = (1 + h, (1 + h)²).",
+              "La pendiente de la secante es (f(1 + h) − f(1))/h = 2 + h. A medida que Q se acerca a P, h tiende a 0.",
+              "Cuando h → 0, la secante se convierte en la recta tangente y su pendiente es f′(1) = 2."
+            ],
+            "video": "/video/derivada.mp4"
+          }
+        ]
+      },
+      {
+        "title": "Integrales",
+        "steps": [
+          {
+            "id": "bf040424-7f70-482b-af80-d5e771d473cc",
+            "type": "ARTICLE",
+            "title": "Idea clave: Integrales",
+            "paragraphs": [
+              "La integral indefinida busca una antiderivada: una función cuya derivada es la que tienes. Siempre se suma la constante C.",
+              "La integral definida entre a y b se calcula como F(b) − F(a).",
+              "Para funciones positivas, la integral definida representa el área bajo la curva."
+            ]
+          },
+          {
+            "id": "c7e30a6f-1e81-4837-90f0-f77211bfbf67",
+            "type": "ARTICLE",
+            "title": "Ejercicio 1: Integrales",
+            "paragraphs": [
+              "¿Cuál es la integral indefinida de 2x?",
+              "a) x² + C",
+              "b) 2x² + C",
+              "c) x + C",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: a) x² + C",
+              "Por qué: La derivada de x² es 2x, y siempre se suma la constante C."
+            ]
+          },
+          {
+            "id": "eedde6af-40b6-4a5b-8e2a-d1c0a4d1399a",
+            "type": "ARTICLE",
+            "title": "Ejercicio 2: Integrales",
+            "paragraphs": [
+              "¿Cuánto vale la integral de x entre 0 y 1?",
+              "a) 1",
+              "b) 1/2",
+              "c) 2",
+              "Resuélvelo antes de leer la respuesta.",
+              "Respuesta: b) 1/2",
+              "Por qué: Una antiderivada es x²/2; evaluada de 0 a 1 da 1/2."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
