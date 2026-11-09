@@ -1,0 +1,125 @@
+<%- include('../partials/top') %>
+<%
+  const courseUrl = `/p-gina-de-programas/${program.id}`;
+  const enrolled = progress && progress.enrolled;
+  const stepUrl = id => enrolled ? `${courseUrl}/participante?paso=${id}` : courseUrl;
+  const ytSrc = id => `https://www.youtube.com/embed/${id}?rel=0&cc_load_policy=1`;
+%>
+<section class="area-hero" style="--area:<%= area.color %>;--area-soft:<%= area.soft %>">
+  <div class="area-hero__inner">
+    <nav class="breadcrumbs" aria-label="Ruta">
+      <a href="/">Inicio</a><span aria-hidden="true">›</span><a href="/challenges">Cursos</a><span aria-hidden="true">›</span><span aria-current="page"><%= area.name %></span>
+    </nav>
+    <div class="area-hero__grid">
+      <div>
+        <span class="area-hero__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[area.icon] %></svg></span>
+        <h1 class="h-page"><%= area.name %></h1>
+        <p class="area-hero__sub"><%= area.subject %> · <%= area.tagline %></p>
+        <p class="area-hero__text"><%= area.description %></p>
+        <div class="area-hero__actions">
+          <% if (enrolled && progress.done < progress.total) { %>
+            <a class="btn btn--light btn--lg" href="<%= courseUrl %>/participante">Continuar el curso</a>
+          <% } else if (enrolled) { %>
+            <a class="btn btn--light btn--lg" href="<%= courseUrl %>/participante">Repasar el curso</a>
+          <% } else { %>
+            <a class="btn btn--light btn--lg" href="<%= courseUrl %>">Ir al curso</a>
+          <% } %>
+          <a class="btn btn--outline-light btn--lg" href="/banco-de-ejercicios?materia=<%= area.programSlug %>">Practicar ejercicios</a>
+        </div>
+      </div>
+      <div class="area-hero__card">
+        <img src="<%= area.cover %>" alt="<%= program.imageAlt %>" width="1200" height="675">
+        <div class="area-hero__stats">
+          <% if (progress && progress.enrolled) { %>
+            <div class="ring" style="--p:<%= progress.percent %>;--ring:<%= area.color %>" role="img" aria-label="Avance del curso: <%= progress.percent %>%"><span><%= progress.percent %>%</span></div>
+            <p><strong><%= progress.done %> de <%= progress.total %> pasos</strong><br><span class="muted">Tu avance en el curso</span></p>
+          <% } else { %>
+            <ul class="mini-stats">
+              <li><strong><%= topics.length %></strong> temas</li>
+              <li><strong><%= program.sections.reduce((n, s) => n + s.steps.length, 0) %></strong> pasos</li>
+              <li><strong><%= topics.reduce((n, t) => n + t.exercises.length, 0) %></strong> ejercicios</li>
+            </ul>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section__head">
+    <div>
+      <p class="eyebrow">Ruta del área</p>
+      <h2 class="h-section">Temas de <%= area.name %></h2>
+    </div>
+    <p class="section__lead">Sigue los temas en orden. En cada uno mira el video, lee la idea clave y practica antes de pasar al siguiente.</p>
+  </div>
+
+  <ol class="topic-list">
+    <% topics.forEach((t, i) => {
+         const total = t.stepsTotal + t.exercises.length;
+         const done = t.stepsDone + t.exDone;
+         const state = !member || !total ? null : (done === total ? 'done' : (done > 0 ? 'progress' : 'todo')); %>
+      <li class="topic-card" id="<%= t.slug %>" style="--area:<%= area.color %>;--area-soft:<%= area.soft %>">
+        <div class="topic-card__head">
+          <span class="topic-card__num"><%= i + 1 %></span>
+          <div>
+            <h3 class="topic-card__title"><%= t.title %></h3>
+            <p class="topic-card__text"><%= t.text %></p>
+          </div>
+          <% if (state === 'done') { %><span class="status status--done">✓ Completado</span>
+          <% } else if (state === 'progress') { %><span class="status status--progress"><%= done %>/<%= total %> hecho</span>
+          <% } else if (state === 'todo') { %><span class="status">Pendiente</span><% } %>
+        </div>
+
+        <div class="topic-card__body<%= t.youtube || t.animated ? '' : ' topic-card__body--single' %>">
+          <div class="topic-card__learn">
+            <% if (t.idea) { %>
+              <div class="idea">
+                <p class="idea__title">💡 Idea clave</p>
+                <% t.idea.forEach(p => { %><p><%= p %></p><% }) %>
+              </div>
+            <% } %>
+            <% if (t.animated) { %>
+              <details class="transcript">
+                <summary>Video animado: <%= t.animated.title.replace(/^Video:\s*/, '') %> · ver transcripción</summary>
+                <video controls preload="metadata" playsinline muted width="640" height="360"><source src="<%= t.animated.video %>" type="video/mp4"></video>
+                <% t.animated.paragraphs.forEach(p => { %><p><%= p %></p><% }) %>
+              </details>
+            <% } %>
+            <div class="topic-card__actions">
+              <% if (t.exercises.length) { %>
+                <a class="btn btn--small" href="/banco-de-ejercicios#<%= t.exercises[0] %>">Practicar (<%= t.exercises.length %> ejercicios)</a>
+              <% } %>
+              <% if (t.firstStep) { %>
+                <a class="btn btn--small btn--ghost" href="<%= stepUrl(t.firstStep) %>"><%= enrolled ? 'Abrir en el curso' : 'Ver en el curso' %></a>
+              <% } %>
+            </div>
+          </div>
+          <% if (t.youtube) { %>
+            <div class="video-frame">
+              <iframe src="<%= ytSrc(t.youtube) %>" title="<%= t.title %> (video de YouTube)" loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+            </div>
+          <% } %>
+        </div>
+      </li>
+    <% }) %>
+  </ol>
+</section>
+
+<section class="section section--tint">
+  <div class="next-areas">
+    <h2 class="h-topic">Sigue explorando</h2>
+    <div class="next-areas__list">
+      <% areas.filter(a => !a.soon && a.slug !== area.slug).forEach(a => { %>
+        <a class="next-area" href="<%= a.page %>" style="--area:<%= a.color %>;--area-soft:<%= a.soft %>">
+          <span class="area-card__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[a.icon] %></svg></span>
+          <span><strong><%= a.name %></strong><small><%= a.tagline %></small></span>
+          <span aria-hidden="true">→</span>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

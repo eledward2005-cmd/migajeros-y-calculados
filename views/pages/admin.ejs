@@ -1,0 +1,24 @@
+<%- include('../partials/top') %>
+<section class="admin">
+  <h1 class="h-section">Preguntas recibidas (<%= questions.length %>)</h1>
+  <% if (!questions.length) { %><p>Aún no hay preguntas.</p><% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Fecha</th><th>Nombre</th><th>Correo</th><th>Materia</th><th>Tema</th><th>Pregunta</th></tr></thead>
+      <tbody>
+        <% questions.forEach(q => { %>
+          <tr>
+            <td><%= new Date(q.created_at).toLocaleString('es-CO') %></td>
+            <td><%= q.first_name %> <%= q.last_name %></td>
+            <td><a class="link" href="mailto:<%= q.email %>"><%= q.email %></a></td>
+            <td><%= q.subject %></td>
+            <td><%= q.topic || '—' %></td>
+            <td><%= q.question %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+<%- include('../partials/bottom') %>

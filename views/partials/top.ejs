@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Plataforma de apoyo académico en Matemática, Física y Álgebra Lineal para estudiantes de ingeniería de la UCC Bogotá.' %>">
+  <link rel="icon" type="image/png" href="/img/logo.png">
+  <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/besley-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/styles.css?v=<%= assetV.css %>">
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body class="page-<%= typeof bodyClass !== 'undefined' ? bodyClass : (active || 'otra') %>">
+  <a class="skip-link" href="#main">Ir al contenido principal</a>
+  <%- include('header') %>
+  <main id="main" tabindex="-1">

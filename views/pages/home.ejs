@@ -1,0 +1,196 @@
+<%- include('../partials/top') %>
+<% const h = site.home; const pct = (n, d) => d ? Math.round(n / d * 100) : 0; %>
+
+<% if (dash) { %>
+  <!-- Bienvenida personalizada (estudiante con sesión) -->
+  <section class="welcome">
+    <div class="welcome__main">
+      <p class="eyebrow">Tu panel de estudio</p>
+      <h1 class="welcome__title">Hola, <%= dash.member.first_name %> 👋</h1>
+      <p class="welcome__text">
+        <% if (dash.streak > 0) { %>Llevas <strong><%= dash.streak %> día<%= dash.streak === 1 ? '' : 's' %></strong> seguidos estudiando. ¡No rompas la racha!
+        <% } else { %>Hoy es un buen día para avanzar. Completa un paso o un ejercicio para empezar tu racha.<% } %>
+      </p>
+      <div class="level-card">
+        <div class="level-card__badge" aria-hidden="true"><%= dash.level.number %></div>
+        <div class="level-card__body">
+          <p><strong>Nivel <%= dash.level.number %> · <%= dash.level.name %></strong> <span class="muted"><%= dash.xp %> XP</span></p>
+          <div class="progress progress--xp" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= dash.level.pct %>" aria-label="Avance al siguiente nivel"><span style="width: <%= dash.level.pct %>%"></span></div>
+          <p class="muted small"><%= dash.level.next ? `Te faltan ${dash.level.toNext} XP para ${dash.level.nextName}` : '¡Llegaste al nivel máximo!' %></p>
+        </div>
+      </div>
+      <div class="welcome__actions">
+        <% if (dash.resume && dash.resume.nextStep) { %>
+          <a class="btn" href="/p-gina-de-programas/<%= dash.resume.program.id %>/participante?paso=<%= dash.resume.nextStep.id %>">Continuar: <%= dash.resume.area.name %></a>
+        <% } else { %>
+          <a class="btn" href="/challenges">Elegir un curso</a>
+        <% } %>
+        <a class="btn btn--ghost" href="/profile">Ver mi panel</a>
+      </div>
+    </div>
+    <ul class="kpis kpis--compact">
+      <li class="kpi"><span class="kpi__icon kpi__icon--teal" aria-hidden="true">✓</span><span class="kpi__value"><%= dash.stats.steps %><small>/<%= dash.stats.totalSteps %></small></span><span class="kpi__label">Pasos completados</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--blue" aria-hidden="true">∑</span><span class="kpi__value"><%= dash.stats.correct %><small>/<%= dash.stats.totalExercises %></small></span><span class="kpi__label">Ejercicios correctos</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--orange" aria-hidden="true">🔥</span><span class="kpi__value"><%= dash.streak %></span><span class="kpi__label">Días de racha</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--purple" aria-hidden="true">★</span><span class="kpi__value"><%= dash.stats.badges %><small>/<%= dash.stats.totalBadges %></small></span><span class="kpi__label">Logros</span></li>
+    </ul>
+  </section>
+<% } else { %>
+  <!-- Portada -->
+  <section class="hero">
+    <div class="hero__text">
+      <p class="eyebrow"><%= h.kicker %></p>
+      <h1 class="hero__title"><%= h.title %></h1>
+      <p class="hero__lead"><%= h.text %></p>
+      <div class="hero__actions">
+        <a class="btn btn--lg" href="<%= h.cta.href %>">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          <%= h.cta.label %>
+        </a>
+        <a class="btn btn--lg btn--ghost" href="/registro?next=/profile">Crear mi cuenta gratis</a>
+      </div>
+      <ul class="hero__trust">
+        <li><strong>3</strong> áreas activas</li>
+        <li><strong>30</strong> pasos guiados</li>
+        <li><strong>18</strong> ejercicios con explicación</li>
+      </ul>
+    </div>
+    <div class="hero__media">
+      <img class="hero__img" src="/img/hero.jpg" alt="" width="1024" height="1024" fetchpriority="high">
+      <div class="float-card float-card--a">
+        <span class="float-card__icon" style="--c:#1A7F4B">✓</span>
+        <span><strong>Paso completado</strong><small>+10 XP · La derivada</small></span>
+      </div>
+      <div class="float-card float-card--b">
+        <span class="float-card__icon" style="--c:#C2410C">🔥</span>
+        <span><strong>Racha de 3 días</strong><small>Logro desbloqueado</small></span>
+      </div>
+      <div class="float-card float-card--c">
+        <span class="badge-pill" style="--badge-bg:#1E40AF;--badge-fg:#fff">★ Matemática completada</span>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+<!-- Áreas de estudio (ley de Miller: 5 grupos, 3–4 temas cada uno) -->
+<section class="section section--tint" id="areas">
+  <div class="section__head">
+    <div>
+      <p class="eyebrow">Organizado por áreas</p>
+      <h2 class="h-section"><%= h.subjectsTitle %></h2>
+    </div>
+    <p class="section__lead">Cada área agrupa pocos temas para que estudies paso a paso: video corto, idea clave, ejercicios y un curso con insignia.</p>
+  </div>
+  <div class="area-grid">
+    <% areas.forEach(a => { const prog = a.soon ? null : programs.find(p => p.slug === a.programSlug); const pr = prog && progress[prog.id]; %>
+      <% if (a.soon) { %>
+        <article class="area-card area-card--soon" style="--area:<%= a.color %>;--area-soft:<%= a.soft %>">
+          <span class="area-card__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[a.icon] %></svg></span>
+          <h3 class="area-card__title"><%= a.name %></h3>
+          <p class="area-card__tag"><%= a.tagline %></p>
+          <span class="chip chip--muted">Próximamente</span>
+        </article>
+      <% } else { %>
+        <a class="area-card" href="<%= a.page %>" style="--area:<%= a.color %>;--area-soft:<%= a.soft %>">
+          <span class="area-card__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[a.icon] %></svg></span>
+          <h3 class="area-card__title"><%= a.name %></h3>
+          <p class="area-card__tag"><%= a.tagline %></p>
+          <ul class="chips">
+            <% a.topics.forEach(t => { %><li class="chip"><%= t.title %></li><% }) %>
+          </ul>
+          <% if (pr && pr.enrolled) { %>
+            <div class="area-card__progress">
+              <div class="progress"><span style="width: <%= pr.percent %>%; background: <%= a.color %>"></span></div>
+              <small><%= pr.done %>/<%= pr.total %> pasos</small>
+            </div>
+          <% } else { %>
+            <p class="area-card__meta"><%= a.topics.length %> temas · <%= prog.sections.reduce((n, s) => n + s.steps.length, 0) %> pasos · insignia</p>
+          <% } %>
+          <span class="area-card__go">Explorar <span aria-hidden="true">→</span></span>
+        </a>
+      <% } %>
+    <% }) %>
+  </div>
+</section>
+
+<!-- Ruta de aprendizaje -->
+<section class="section">
+  <div class="section__head section__head--center">
+    <p class="eyebrow">Cómo aprendes aquí</p>
+    <h2 class="h-section"><%= h.pathTitle %></h2>
+  </div>
+  <ol class="journey">
+    <% const stepIcons = ['🎯', '▶', '✎', '📈']; h.steps.forEach((s, i) => { %>
+      <li class="journey__step">
+        <span class="journey__n" aria-hidden="true"><%= stepIcons[i] %></span>
+        <p class="journey__k">Paso <%= s.n %></p>
+        <h3 class="journey__title"><%= s.title %></h3>
+        <p><%= s.text %></p>
+      </li>
+    <% }) %>
+  </ol>
+  <div class="center section__cta"><a class="btn btn--lg" href="<%= h.pathCta.href %>"><%= h.pathCta.label %></a></div>
+</section>
+
+<!-- Gamificación -->
+<section class="section section--navy">
+  <div class="split">
+    <div class="split__text">
+      <p class="eyebrow eyebrow--light">Aprende con metas claras</p>
+      <h2 class="h-section">Gana experiencia, sube de nivel y colecciona insignias</h2>
+      <ul class="feature-list">
+        <li><span aria-hidden="true">⚡</span><div><strong>+10 XP por cada paso</strong> y +5 XP por cada ejercicio resuelto bien.</div></li>
+        <li><span aria-hidden="true">🔥</span><div><strong>Racha de estudio:</strong> cada día que practicas suma a tu racha.</div></li>
+        <li><span aria-hidden="true">🎯</span><div><strong>Meta semanal</strong> que tú eliges, con avance visible en tu panel.</div></li>
+        <li><span aria-hidden="true">★</span><div><strong>Insignias</strong> al terminar cada curso y logros por tu constancia.</div></li>
+      </ul>
+      <a class="btn btn--light" href="<%= member ? '/profile' : '/registro?next=/profile' %>"><%= member ? 'Ver mi panel' : 'Empezar a sumar XP' %></a>
+    </div>
+    <div class="split__media">
+      <div class="mock-dash" aria-hidden="true">
+        <div class="mock-dash__row"><span class="avatar avatar--sm">J</span><div><strong>Nivel 3 · Calculista</strong><div class="progress progress--xp"><span style="width:64%"></span></div></div></div>
+        <div class="mock-dash__bars">
+          <% [2,4,1,5,3,6,4].forEach((v, i) => { %><span style="height:<%= v * 14 %>px"><em><%= ['L','M','M','J','V','S','D'][i] %></em></span><% }) %>
+        </div>
+        <div class="mock-dash__badges">
+          <span class="badge-pill" style="--badge-bg:#1E40AF;--badge-fg:#fff">★ Matemática</span>
+          <span class="badge-pill" style="--badge-bg:#115E59;--badge-fg:#fff">★ Física</span>
+          <span class="badge-pill" style="--badge-bg:#5B21B6;--badge-fg:#fff">★ Álgebra</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Apoyo institucional -->
+<section class="section">
+  <div class="section__head">
+    <div>
+      <p class="eyebrow">No estudias solo</p>
+      <h2 class="h-section">Apoyo de la UCC cuando lo necesites</h2>
+    </div>
+    <a class="btn btn--ghost" href="/ayudas-ucc">Ver Ayudas UCC</a>
+  </div>
+  <div class="photo-grid">
+    <% site.ayudas.resources.slice(0, 3).forEach(r => { %>
+      <a class="photo-card" href="/ayudas-ucc">
+        <img src="<%= r.img %>" alt="" width="602" height="219" loading="lazy">
+        <span class="photo-card__body"><strong><%= r.title %></strong><span><%= r.text %></span></span>
+      </a>
+    <% }) %>
+  </div>
+</section>
+
+<% if (!member) { %>
+  <section class="cta-band">
+    <div>
+      <h2>Lleva el control de tu aprendizaje</h2>
+      <p>Crea tu cuenta gratis para guardar tu avance, tus respuestas y tus insignias.</p>
+    </div>
+    <div class="cta-band__actions">
+      <a class="btn btn--light btn--lg" href="/registro?next=/profile">Regístrate gratis</a>
+      <a class="btn btn--outline-light btn--lg" href="/login?next=/profile">Ya tengo cuenta</a>
+    </div>
+  </section>
+<% } %>
+<%- include('../partials/bottom') %>

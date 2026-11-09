@@ -1,0 +1,50 @@
+<%- include('../partials/top') %>
+<% const isLogin = mode === 'login'; %>
+<section class="auth-page">
+  <div class="auth-split">
+    <%# Columna del formulario (va primero en el HTML: es la acción principal) %>
+    <div class="auth-panel">
+      <p class="eyebrow"><%= isLogin ? 'Tu cuenta' : 'Cuenta gratuita' %></p>
+      <h1 class="h-section"><%= isLogin ? 'Inicia sesión' : 'Crea tu cuenta' %></h1>
+      <p class="auth-panel__lead"><%= isLogin ? 'Continúa donde quedaste en tus cursos y revisa tu panel académico.' : 'Es gratis y solo toma un minuto. Tu avance quedará guardado.' %></p>
+
+      <form class="auth__form" action="/api/auth/<%= isLogin ? 'login' : 'registro' %>" method="post">
+        <input type="hidden" name="next" value="<%= next %>">
+        <% if (error) { %><p class="auth__error" role="alert"><%= error %></p><% } %>
+        <% if (!isLogin) { %>
+          <div class="auth__row">
+            <label>Nombre<input name="firstName" required maxlength="100" autocomplete="given-name" value="<%= values.firstName || '' %>"></label>
+            <label>Apellido<input name="lastName" required maxlength="100" autocomplete="family-name" value="<%= values.lastName || '' %>"></label>
+          </div>
+        <% } %>
+        <label>Correo<input name="email" type="email" required maxlength="255" autocomplete="email" placeholder="tu.correo@campusucc.edu.co" value="<%= values.email || '' %>"></label>
+        <label>Contraseña<input name="password" type="password" required minlength="<%= isLogin ? 1 : 6 %>" autocomplete="<%= isLogin ? 'current-password' : 'new-password' %>"<%- isLogin ? '' : ' aria-describedby="clave-ayuda"' %>></label>
+        <% if (!isLogin) { %><p class="auth__hint" id="clave-ayuda">Mínimo 6 caracteres.</p><% } %>
+        <button class="btn btn--block btn--lg" type="submit"><%= isLogin ? 'Iniciar sesión' : 'Crear mi cuenta' %></button>
+      </form>
+
+      <p class="auth-panel__switch">
+        <% if (isLogin) { %>
+          ¿No tienes cuenta? <a class="link" href="/registro?next=<%= encodeURIComponent(next) %>">Regístrate gratis</a>
+        <% } else { %>
+          ¿Ya tienes cuenta? <a class="link" href="/login?next=<%= encodeURIComponent(next) %>">Inicia sesión</a>
+        <% } %>
+      </p>
+    </div>
+
+    <%# Columna visual: foto y beneficios de la cuenta %>
+    <aside class="auth-visual" aria-labelledby="beneficios">
+      <img src="/img/monitorias.jpg" alt="Estudiantes trabajando con portátiles y libros en una biblioteca" width="1400" height="613">
+      <div class="auth-visual__body">
+        <h2 class="auth-visual__title" id="beneficios">Con tu cuenta puedes…</h2>
+        <ul class="auth-benefits">
+          <li><span aria-hidden="true">📈</span><div><strong>Guardar tu avance</strong> en los cursos de Cálculo, Álgebra Lineal y Física.</div></li>
+          <li><span aria-hidden="true">⭐</span><div><strong>Ganar XP y subir de nivel</strong>, de Migajero a Ingeniero UCC, y desbloquear insignias.</div></li>
+          <li><span aria-hidden="true">🔥</span><div><strong>Mantener tu racha</strong> y cumplir la meta semanal que tú eliges.</div></li>
+          <li><span aria-hidden="true">✅</span><div><strong>Guardar tus respuestas</strong> del banco de ejercicios en tu panel.</div></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

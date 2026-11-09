@@ -1,0 +1,95 @@
+<%- include('../partials/top') %>
+<% const c = site.courses; %>
+<section class="page-hero">
+  <div class="page-hero__inner">
+    <nav class="breadcrumbs" aria-label="Ruta"><a href="/">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Cursos</span></nav>
+    <div class="page-hero__grid">
+      <div>
+        <h1 class="h-page"><%= member ? `¡Hola, ${member.first_name}!` : c.title %></h1>
+        <p class="lead"><%= c.text %></p>
+      </div>
+      <% if (member) { %>
+        <a class="hello-card" href="/profile">
+          <span class="hello-card__icon" aria-hidden="true"><%= c.icon %></span>
+          <span><strong>Ver mi panel académico</strong><small>Avance, racha, logros y recomendaciones</small></span>
+        </a>
+      <% } else { %>
+        <a class="hello-card" href="/registro?next=/challenges">
+          <span class="hello-card__icon" aria-hidden="true"><%= c.icon %></span>
+          <span><strong>Crea tu cuenta para ver tu avance</strong><small>Es gratis y guarda tu progreso</small></span>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="section" data-catalog>
+  <div class="section__head">
+    <h2 class="h-section"><%= c.listTitle %></h2>
+    <%
+      // Filtros como enlaces reales: funcionan sin JavaScript; main.js los mejora sin recargar
+      const chips = [{ slug: 'todas', name: 'Todas', href: '/challenges' }]
+        .concat(areas.filter(a => !a.soon).map(a => ({ slug: a.slug, name: a.name, href: `/challenges?area=${a.slug}`, color: a.color })));
+      if (member) chips.push({ slug: 'mios', name: 'Mis cursos', href: '/challenges?area=mios' });
+      const visible = (areaSlug, mine) => filter === 'todas' || (filter === 'mios' ? mine : areaSlug === filter);
+      let shown = 0;
+    %>
+    <nav class="filter-chips" aria-label="Filtrar cursos">
+      <% chips.forEach(ch => { const on = ch.slug === filter; %>
+        <a class="filter-chip<%= on ? ' is-active' : '' %>" href="<%= ch.href %>" data-cat-filter="<%= ch.slug %>"<%- on ? ' aria-current="true"' : '' %><%- ch.color ? ` style="--area:${ch.color}"` : '' %>><%= ch.name %></a>
+      <% }) %>
+    </nav>
+  </div>
+
+  <ul class="course-grid">
+    <% ['algebra-lineal', 'fisica', 'matematica'].map(s => programs.find(p => p.slug === s)).forEach(p => {
+         const a = byProgramSlug.get(p.slug); const pr = progress[p.id]; const href = `/p-gina-de-programas/${p.id}`;
+         const steps = p.sections.reduce((n, s) => n + s.steps.length, 0);
+         const mine = !!(pr && pr.enrolled); const show = visible(a.slug, mine); if (show) shown++; %>
+      <li class="course-card" data-area="<%= a.slug %>" data-mine="<%= mine ? '1' : '0' %>" style="--area:<%= a.color %>;--area-soft:<%= a.soft %>"<%= show ? '' : ' hidden' %>>
+        <a class="course-card__media" href="<%= href %>" tabindex="-1" aria-hidden="true">
+          <img src="<%= p.image %>" alt="<%= p.imageAlt %>" width="1200" height="675" loading="lazy">
+          <% if (pr && pr.finished) { %><span class="course-card__flag">★ Completado</span><% } %>
+        </a>
+        <div class="course-card__body">
+          <span class="area-pill"><%= a.name %></span>
+          <h3 class="course-card__title"><a href="<%= href %>"><%= p.title %></a></h3>
+          <ul class="course-card__meta">
+            <li><%= p.sections.length %> temas</li><li><%= steps %> pasos</li><li><%= p.price %></li><li>Insignia</li>
+          </ul>
+          <% if (pr && pr.enrolled) { %>
+            <div class="course-card__progress">
+              <div class="progress"><span style="width: <%= pr.percent %>%; background: <%= a.color %>"></span></div>
+              <small><%= pr.done %>/<%= pr.total %> pasos · <%= pr.percent %>%</small>
+            </div>
+            <a class="btn btn--block btn--small" href="<%= href %>/participante"><%= pr.finished ? 'Repasar' : 'Continuar' %></a>
+          <% } else { %>
+            <a class="btn btn--block btn--small" href="<%= href %>">Ver detalles</a>
+          <% } %>
+        </div>
+      </li>
+    <% }) %>
+    <% areas.filter(a => a.soon).forEach(a => { const show = visible(a.slug, false); if (show) shown++; %>
+      <li class="course-card course-card--soon" data-area="<%= a.slug %>" data-mine="0" style="--area:<%= a.color %>;--area-soft:<%= a.soft %>"<%= show ? '' : ' hidden' %>>
+        <div class="course-card__placeholder"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[a.icon] %></svg></div>
+        <div class="course-card__body">
+          <span class="area-pill"><%= a.name %></span>
+          <h3 class="course-card__title"><%= a.name %>: <%= a.tagline.toLowerCase() %></h3>
+          <p class="muted">Estamos preparando este curso.</p>
+          <span class="chip chip--muted">Próximamente</span>
+        </div>
+      </li>
+    <% }) %>
+    <%# Tarjeta de ayuda: completa la cuadrícula y solo aparece en "Todas" %>
+    <li class="course-card course-card--help" data-catalog-help<%= filter === 'todas' ? '' : ' hidden' %>>
+      <div class="course-card__body">
+        <span class="course-card--help__icon" aria-hidden="true">?</span>
+        <h3 class="course-card__title">¿No encuentras tu tema?</h3>
+        <p>Escríbenos tu pregunta y te orientamos con el tema o con los apoyos académicos de la UCC.</p>
+        <a class="btn btn--block btn--small btn--light" href="/ayudas-ucc#duda">Enviar mi duda</a>
+      </div>
+    </li>
+  </ul>
+  <p class="empty-note" data-catalog-empty<%= shown === 0 ? '' : ' hidden' %>>Aún no te has unido a ningún curso. <a class="link" href="/challenges">Mira todos los cursos</a> y elige uno.</p>
+</section>
+<%- include('../partials/bottom') %>

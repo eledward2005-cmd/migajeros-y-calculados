@@ -1,0 +1,27 @@
+<%- include('../partials/top') %>
+<% const isError = typeof error !== 'undefined' && error; %>
+<section class="notfound">
+  <div class="notfound__card">
+    <p class="notfound__code" aria-hidden="true"><%= isError ? '500' : '404' %></p>
+    <% if (isError) { %>
+      <h1 class="h-section">Algo salió mal</h1>
+      <p class="notfound__text">Tuvimos un problema al cargar esta página. Intenta de nuevo en unos segundos o busca lo que necesitas.</p>
+    <% } else { %>
+      <h1 class="h-section">No encontramos esta página</h1>
+      <p class="notfound__text">La dirección no existe o cambió. Busca el tema que necesitas o vuelve a una de las secciones principales.</p>
+    <% } %>
+
+    <form class="notfound__search" action="/buscar" method="get" role="search">
+      <label class="visually-hidden" for="buscar-404">Buscar en el sitio</label>
+      <input id="buscar-404" name="q" type="search" placeholder="Buscar un tema, curso o ejercicio…" autocomplete="off">
+      <button class="btn" type="submit">Buscar</button>
+    </form>
+
+    <nav class="notfound__actions" aria-label="Secciones principales">
+      <a class="btn" href="/">Inicio</a>
+      <a class="btn btn--ghost" href="/challenges">Cursos</a>
+      <a class="btn btn--ghost" href="/profile">Mi progreso</a>
+    </nav>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

@@ -1,0 +1,55 @@
+<%- include('../partials/top') %>
+<% const n = site.nosotros; %>
+<section class="mission">
+  <div class="mission__media">
+    <img class="mission__img" src="/img/mision.jpg" alt="Estudiante de ingeniería trabajando en su portátil" width="1024" height="1024">
+  </div>
+  <div class="mission__text">
+    <nav class="breadcrumbs" aria-label="Ruta"><a href="/">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Nosotros</span></nav>
+    <p class="eyebrow">Quiénes somos</p>
+    <h1 class="h-page"><%= n.title %></h1>
+    <p class="lead"><%= n.text %></p>
+    <ul class="values">
+      <li><strong>Rigor</strong><span>Contenido de ciencias básicas de la UCC</span></li>
+      <li><strong>A tu ritmo</strong><span>Videos cortos y pasos guiados</span></li>
+      <li><strong>Seguimiento</strong><span>Panel con tu avance y logros</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tint how">
+  <div class="section__head section__head--center">
+    <p class="eyebrow">Paso a paso</p>
+    <h2 class="h-section"><%= n.howTitle %></h2>
+  </div>
+  <ol class="how-cards">
+    <% n.how.forEach((c, i) => { %>
+      <li class="how-card">
+        <span class="how-card__n"><%= i + 1 %></span>
+        <img src="<%= c.icon %>" alt="" width="76" height="73" loading="lazy">
+        <h3 class="how-card__title"><%= c.title %></h3>
+        <p><%= c.text %></p>
+      </li>
+    <% }) %>
+  </ol>
+  <p class="pill"><strong><%= n.soonLabel %></strong> <%= n.soonText %></p>
+</section>
+
+<section class="section">
+  <div class="team">
+    <div>
+      <p class="eyebrow">El equipo</p>
+      <h2 class="h-section">Hecho por estudiantes de la UCC</h2>
+      <p class="lead">Migajeros y Calculados es un proyecto de estudiantes de Ingeniería de Sistemas de la Universidad Cooperativa de Colombia, Campus Bogotá.</p>
+      <div class="hero__actions">
+        <a class="btn" href="/challenges">Explorar cursos</a>
+        <a class="btn btn--ghost" href="/ayudas-ucc#duda">Escríbenos</a>
+      </div>
+    </div>
+    <ul class="team__list">
+      <li><span class="avatar avatar--lg" aria-hidden="true">E</span><span><strong>Edwar Alejandro Tapiero Rincón</strong><small>Ingeniería de Sistemas · UCC Bogotá</small></span></li>
+      <li><span class="avatar avatar--lg" aria-hidden="true">J</span><span><strong>Juan David Prieto Martínez</strong><small>Ingeniería de Sistemas · UCC Bogotá</small></span></li>
+    </ul>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

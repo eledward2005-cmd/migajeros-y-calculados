@@ -1,0 +1,68 @@
+<%- include('../partials/top') %>
+<%
+  // Sugerencias agrupadas por área (ley de Miller: 3 grupos de 3 o 4 temas)
+  const showSuggestions = !q || results.length === 0;
+%>
+<section class="search-hero">
+  <div class="search-hero__inner">
+    <nav class="breadcrumbs" aria-label="Ruta"><a href="/">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Buscar</span></nav>
+    <p class="eyebrow eyebrow--light">Buscador</p>
+    <h1 class="h-page">¿Qué quieres repasar hoy?</h1>
+    <p class="search-hero__lead">Busca entre los temas, cursos, pasos y ejercicios de Cálculo, Álgebra Lineal y Física.</p>
+    <form class="search-hero__form" action="/buscar" method="get" role="search">
+      <label class="visually-hidden" for="buscar">Buscar en el sitio</label>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input id="buscar" name="q" type="search" value="<%= q %>" placeholder="Por ejemplo: derivada, determinante, Newton…" autocomplete="off">
+      <button class="btn btn--lg" type="submit">Buscar</button>
+    </form>
+  </div>
+</section>
+
+<section class="search-page">
+  <% if (q) { %>
+    <div class="search-page__head">
+      <h2 class="h-topic">Resultados para “<%= q %>”</h2>
+      <p class="muted" role="status"><%= results.length %> resultado<%= results.length === 1 ? '' : 's' %></p>
+    </div>
+    <% if (results.length) { %>
+      <ul class="results">
+        <% results.forEach(r => { %>
+          <li>
+            <a class="results__link" href="<%= r.href %>">
+              <span class="results__kind"><%= r.kind %></span>
+              <span class="results__title"><%= r.title %></span>
+              <span class="results__snippet"><%= r.snippet %></span>
+            </a>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <div class="search-empty" data-search-empty>
+        <span class="search-empty__icon" aria-hidden="true">🔍</span>
+        <p><strong>No encontramos resultados.</strong> Revisa la ortografía, usa una sola palabra o prueba con una de las búsquedas sugeridas.</p>
+      </div>
+    <% } %>
+  <% } %>
+
+  <% if (showSuggestions) { %>
+    <div class="suggest" data-search-suggestions>
+      <h2 class="h-topic">Búsquedas sugeridas</h2>
+      <p class="muted">Los temas de cada área de estudio.</p>
+      <div class="suggest__grid">
+        <% suggestions.forEach(g => { %>
+          <section class="suggest__group" style="--area:<%= g.area.color %>;--area-soft:<%= g.area.soft %>" aria-labelledby="sug-<%= g.area.slug %>">
+            <h3 class="suggest__title" id="sug-<%= g.area.slug %>">
+              <span class="area-card__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[g.area.icon] %></svg></span>
+              <%= g.area.name %>
+            </h3>
+            <ul class="suggest__list">
+              <% g.terms.forEach(t => { %><li><a class="suggest__chip" href="/buscar?q=<%= encodeURIComponent(t) %>"><%= t %></a></li><% }) %>
+            </ul>
+            <a class="suggest__more" href="<%= g.area.page %>">Ver el área de <%= g.area.name %> →</a>
+          </section>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+</section>
+<%- include('../partials/bottom') %>

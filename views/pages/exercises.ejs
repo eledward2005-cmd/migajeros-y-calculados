@@ -1,0 +1,89 @@
+<%- include('../partials/top') %>
+<%
+  const answeredIn = s => s.exercises.filter(e => results[e.id]).length;
+  const correctIn = s => s.exercises.filter(e => results[e.id] && results[e.id].correct).length;
+  const totalAnswered = bank.subjects.reduce((a, s) => a + answeredIn(s), 0);
+  const totalCorrect = bank.subjects.reduce((a, s) => a + correctIn(s), 0);
+%>
+<section class="page-hero page-hero--compact">
+  <div class="page-hero__inner">
+    <nav class="breadcrumbs" aria-label="Ruta"><a href="/">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Ejercicios</span></nav>
+    <h1 class="h-page"><%= bank.title %></h1>
+    <p class="lead"><%= bank.intro %> Elige una opción y presiona <strong>Comprobar</strong>: verás si acertaste y por qué.</p>
+  </div>
+</section>
+<section class="bank" data-bank data-logged="<%= member ? '1' : '0' %>">
+
+  <div class="bank-bar" data-bank-bar>
+    <%# Pestañas como enlaces reales (?materia=...): funcionan sin JavaScript %>
+    <nav class="bank-tabs" aria-label="Filtrar por materia">
+      <a class="bank-tab<%= filter === 'todas' ? ' is-active' : '' %>" href="/banco-de-ejercicios" data-filter="todas"<%- filter === 'todas' ? ' aria-current="true"' : '' %>>Todas</a>
+      <% bank.subjects.forEach(s => { const ar = areas.find(a => a.programSlug === s.slug); const on = filter === s.slug; %>
+        <a class="bank-tab<%= on ? ' is-active' : '' %>" href="/banco-de-ejercicios?materia=<%= s.slug %>" data-filter="<%= s.slug %>"<%- on ? ' aria-current="true"' : '' %>><%= ar.name %></a>
+      <% }) %>
+    </nav>
+    <div class="bank-score" aria-live="polite">
+      <div class="bank-score__text">
+        <strong data-score-correct><%= totalCorrect %></strong> correctas de <span data-score-total><%= bank.total %></span>
+        <span class="bank-score__sub">· <span data-score-answered><%= totalAnswered %></span> respondidas</span>
+      </div>
+      <div class="progress progress--bank"><span data-score-bar style="width: <%= Math.round(totalAnswered / bank.total * 100) %>%"></span></div>
+    </div>
+  </div>
+
+  <% if (!member) { %>
+    <p class="bank-hint">
+      <a class="link" href="/login?next=/banco-de-ejercicios">Inicia sesión</a> o
+      <a class="link" href="/registro?next=/banco-de-ejercicios">regístrate</a> para guardar tus respuestas en Mi progreso.
+    </p>
+  <% } %>
+
+  <% bank.subjects.forEach((s, si) => { %>
+    <% const ar = areas.find(a => a.programSlug === s.slug); %>
+    <section class="bank-subject bank-subject--<%= si %>" id="<%= s.slug %>" data-subject="<%= s.slug %>" aria-labelledby="materia-<%= si %>" style="--area:<%= ar.color %>;--area-soft:<%= ar.soft %>"<%= filter === 'todas' || filter === s.slug ? '' : ' hidden' %>>
+      <div class="bank-subject__head">
+        <h2 class="h-section" id="materia-<%= si %>"><span class="area-card__icon"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><%- icons[ar.icon] %></svg></span><%= ar.name %></h2>
+        <p class="bank-subject__score"><span data-subject-correct><%= correctIn(s) %></span>/<%= s.exercises.length %> correctas</p>
+      </div>
+
+      <form class="ex-form" action="/banco-de-ejercicios<%= filter === 'todas' ? '' : `?materia=${filter}` %>#<%= s.slug %>" method="post" data-ex-form novalidate>
+        <% s.exercises.forEach((e, i) => { const r = results[e.id]; %>
+          <fieldset class="ex-card<%= r ? (r.correct ? ' is-correct' : ' is-wrong') : '' %>" id="<%= e.id %>" data-ex="<%= e.id %>">
+            <legend class="ex-card__legend">
+              <span class="ex-card__num">Ejercicio <%= i + 1 %><% if (topicOfExercise[e.id]) { %><span class="chip chip--area"><%= topicOfExercise[e.id] %></span><% } %></span>
+              <span class="ex-card__q"><%= e.question %></span>
+            </legend>
+            <div class="ex-options" role="radiogroup" aria-label="Opciones del ejercicio <%= i + 1 %>">
+              <% e.options.forEach(o => {
+                   const picked = r && r.choice === o.letter;
+                   const cls = r ? (o.letter === r.correctLetter ? ' is-right' : (picked ? ' is-picked-wrong' : '')) : ''; %>
+                <label class="ex-option<%= cls %>">
+                  <input type="radio" name="r_<%= e.id %>" value="<%= o.letter %>"<%= picked ? ' checked' : '' %><%= r ? ' disabled' : '' %>>
+                  <span class="ex-option__letter"><%= o.letter %></span>
+                  <span class="ex-option__text"><%= o.text %></span>
+                </label>
+              <% }) %>
+            </div>
+            <div class="ex-actions">
+              <button class="btn btn--small" type="submit" data-check<%= r ? ' hidden' : '' %>>Comprobar</button>
+              <button class="btn btn--small btn--ghost" type="submit" formaction="/api/ejercicios-reiniciar" formnovalidate name="exercise" value="<%= e.id %>" data-retry<%= r ? '' : ' hidden' %>>Intentar de nuevo</button>
+              <p class="ex-msg" data-msg role="status" aria-live="polite"></p>
+            </div>
+            <div class="ex-feedback" data-feedback<%= r ? '' : ' hidden' %>>
+              <% if (r) { %>
+                <p class="ex-feedback__title"><%= r.correct ? '¡Correcto!' : 'Incorrecto' %></p>
+                <p>Respuesta: <%= r.correctLetter %>) <%= r.correctText %>.</p>
+                <p class="ex-feedback__why"><%= r.explanation %></p>
+              <% } %>
+            </div>
+          </fieldset>
+        <% }) %>
+        <div class="ex-form__foot">
+          <button class="btn" type="submit" data-check-all>Comprobar todas</button>
+          <button class="btn btn--ghost" type="submit" formaction="/api/ejercicios-reiniciar" formnovalidate name="subject" value="<%= s.slug %>" data-reset="<%= s.slug %>">Reiniciar <%= ar.name %></button>
+        </div>
+      </form>
+    </section>
+  <% }) %>
+</section>
+<%- include('../partials/bottom') %>

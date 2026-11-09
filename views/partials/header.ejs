@@ -1,0 +1,87 @@
+<%
+  const lvl = typeof memberLevel !== 'undefined' ? memberLevel : null;
+%>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-logo" href="/" aria-label="Migajeros y Calculados — Inicio">
+      <img src="/img/logo.png" alt="Migajeros-y-Calculados-logo" width="110" height="42">
+    </a>
+    <nav class="main-nav" aria-label="Sitio">
+      <ul class="nav-list">
+        <% site.nav.forEach(item => { %>
+          <li class="nav-item<%= item.children ? ' has-children' : '' %>">
+            <a class="nav-btn<%= item.key === active || (item.children || []).some(c => c.key === active) ? ' is-current' : '' %>" href="<%= item.href %>"<%- item.key === active ? ' aria-current="page"' : '' %>>
+              <%= item.label %><% if (item.children) { %><svg class="chev" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg><% } %>
+            </a>
+            <% if (item.children) { %>
+              <ul class="submenu">
+                <% item.children.forEach(c => { %>
+                  <li><a href="<%= c.href %>"<%- c.key === active && c.href !== '/challenges' ? ' aria-current="page"' : '' %>><%= c.label %></a></li>
+                <% }) %>
+              </ul>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="header-search" href="/buscar" aria-label="Buscar en el sitio">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </a>
+      <% if (member) { %>
+        <a class="account-chip" href="/profile" title="Ir a mi panel">
+          <span class="avatar avatar--sm" aria-hidden="true"><%= member.first_name.charAt(0).toUpperCase() %></span>
+          <span class="account-chip__text">
+            <strong><%= member.first_name %></strong>
+            <% if (lvl) { %><small>Nivel <%= lvl.number %> · <%= lvl.xp %> XP</small><% } %>
+          </span>
+        </a>
+      <% } else { %>
+        <a class="btn btn--small btn--ghost header-login" href="/login?next=<%= encodeURIComponent(typeof currentPath !== 'undefined' ? currentPath : '/profile') %>">Iniciar sesión</a>
+      <% } %>
+      <%# Enlace al menú (#menu-movil): sin JavaScript se abre con :target %>
+      <a class="menu-toggle" href="#menu-movil" role="button" aria-label="Menú" aria-expanded="false" aria-controls="menu-movil">
+        <span></span><span></span><span></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="menu-movil">
+  <div class="mobile-menu__top">
+    <img src="/img/logo.png" alt="" width="110" height="42">
+    <a class="mobile-menu__close" href="#" role="button" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="1.6"/></svg>
+    </a>
+  </div>
+  <% if (member) { %>
+    <a class="mobile-menu__account" href="/profile">
+      <span class="avatar avatar--sm" aria-hidden="true"><%= member.first_name.charAt(0).toUpperCase() %></span>
+      <span><strong><%= member.first_name %> <%= member.last_name %></strong><% if (lvl) { %><br><small>Nivel <%= lvl.number %> · <%= lvl.name %></small><% } %></span>
+    </a>
+  <% } %>
+  <ul class="mobile-menu__list">
+    <% site.nav.forEach(item => { %>
+      <li>
+        <a class="mobile-menu__btn<%= item.key === active ? ' is-current' : '' %>" href="<%= item.href %>"><%= item.label %></a>
+        <% if (item.children) { %>
+          <ul class="mobile-menu__sub">
+            <% item.children.forEach(c => { %><li><a href="<%= c.href %>"><%= c.label %></a></li><% }) %>
+          </ul>
+        <% } %>
+      </li>
+    <% }) %>
+  </ul>
+  <form class="mobile-search" action="/buscar" method="get" role="search">
+    <label class="visually-hidden" for="buscar-movil">Buscar en el sitio</label>
+    <input id="buscar-movil" name="q" type="search" placeholder="Buscar..." autocomplete="off">
+    <button class="btn" type="submit">Buscar</button>
+  </form>
+  <% if (!member) { %>
+    <div class="mobile-menu__auth">
+      <a class="btn" href="/login">Iniciar sesión</a>
+      <a class="btn btn--ghost" href="/registro">Regístrate</a>
+    </div>
+  <% } %>
+</div>
+<div class="toast-region" aria-live="polite" aria-atomic="true" data-toasts></div>

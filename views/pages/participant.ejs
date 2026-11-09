@@ -1,0 +1,73 @@
+<%- include('../partials/top') %>
+<% const isDone = id => completed.includes(id); const currentDone = isDone(current.id); const base = `/p-gina-de-programas/${program.id}`; %>
+<div class="participant-top" style="--area:<%= area.color %>;--area-soft:<%= area.soft %>">
+  <nav class="breadcrumbs" aria-label="Ruta">
+    <a href="/">Inicio</a><span aria-hidden="true">›</span><a href="<%= area.page %>"><%= area.name %></a><span aria-hidden="true">›</span><a href="<%= base %>">Curso</a><span aria-hidden="true">›</span><span aria-current="page">Paso <%= stepNumber %></span>
+  </nav>
+</div>
+<section class="participant" style="--area:<%= area.color %>;--area-soft:<%= area.soft %>">
+  <aside class="participant__nav card" aria-label="Contenido del curso">
+    <a class="participant__back" href="<%= base %>"><%= program.title %></a>
+    <div class="participant__progress">
+      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= progress.percent %>" aria-label="Avance del curso">
+        <span style="width: <%= progress.percent %>%"></span>
+      </div>
+      <p class="muted small"><span data-progress-text><%= progress.done %> de <%= progress.total %> pasos</span></p>
+    </div>
+    <% program.sections.forEach((sec, si) => { %>
+      <h2 class="participant__section"><span><%= si + 1 %></span> <%= sec.title %></h2>
+      <ol class="participant__steps">
+        <% sec.steps.forEach(st => { %>
+          <li>
+            <a href="?paso=<%= st.id %>" class="<%= st.id === current.id ? 'is-current' : '' %>" <%- st.id === current.id ? 'aria-current="step"' : '' %>>
+              <span class="step-check<%= isDone(st.id) ? ' is-done' : '' %>" data-step-check="<%= st.id %>" aria-hidden="true"></span>
+              <span><%= st.title %></span>
+              <span class="visually-hidden" data-step-state="<%= st.id %>"><%= isDone(st.id) ? '(completado)' : '' %></span>
+            </a>
+          </li>
+        <% }) %>
+      </ol>
+    <% }) %>
+    <form action="/api/programas/<%= program.id %>/salir" method="post" data-leave-form>
+      <button class="link-button" type="submit">Salir del curso</button>
+    </form>
+  </aside>
+
+  <article class="participant__content card">
+    <p class="participant__kicker"><%= section.title %> · Paso <%= stepNumber %> de <%= progress.total %> · <%= current.type === 'VIDEO' ? 'Video' : (current.title.startsWith('Idea') ? 'Idea clave' : 'Ejercicio') %></p>
+    <h1 class="h-topic"><%= current.title %></h1>
+    <% if (current.video) { %>
+      <video class="step-video" controls preload="metadata" playsinline muted>
+        <source src="<%= current.video %>" type="video/mp4">
+      </video>
+    <% } %>
+    <div class="step-body<%= current.title.startsWith('Idea') ? ' step-body--idea' : '' %>">
+      <% current.paragraphs.forEach(p => {
+           const isAnswer = /^(Respuesta|Por qué):/.test(p); %>
+        <% if (isAnswer) { %><p class="step-answer" data-answer><%= p %></p><% } else { %><p><%= p %></p><% } %>
+      <% }) %>
+      <% if (current.paragraphs.some(p => /^Respuesta:/.test(p))) { %>
+        <%# Sin JavaScript la respuesta ya se ve; el botón solo aparece con JavaScript %>
+        <button class="btn btn--small btn--ghost" type="button" data-reveal data-js-only hidden>Ver respuesta</button>
+      <% } %>
+    </div>
+
+    <form class="step-actions" action="/api/programas/<%= program.id %>/pasos/<%= current.id %>" method="post" data-step-form
+          data-program="<%= program.id %>" data-step="<%= current.id %>">
+      <input type="hidden" name="completed" value="<%= currentDone ? 'false' : 'true' %>">
+      <input type="hidden" name="nextStep" value="<%= next ? next.id : current.id %>">
+      <button class="btn<%= currentDone ? ' btn--ghost' : '' %>" type="submit" data-complete-btn><%= currentDone ? 'Marcar como no completado' : 'Completar paso · +10 XP' %></button>
+      <span class="step-actions__nav">
+        <% if (prev) { %><a class="btn btn--small btn--ghost" href="?paso=<%= prev.id %>">← Anterior</a><% } %>
+        <% if (next) { %><a class="btn btn--small btn--ghost" href="?paso=<%= next.id %>">Siguiente →</a><% } %>
+      </span>
+    </form>
+
+    <div class="badge-earned" data-badge-earned <%- earned ? '' : 'hidden' %>>
+      <span class="badge-pill badge-pill--lg" style="--badge-bg: <%= program.badge.backgroundColor %>; --badge-fg: <%= program.badge.textColor %>">★ <%= program.badge.title %></span>
+      <p><%= program.badge.description %></p>
+      <a class="btn btn--small" href="/profile">Ver mis logros</a>
+    </div>
+  </article>
+</section>
+<%- include('../partials/bottom') %>

@@ -1,0 +1,203 @@
+<%- include('../partials/top') %>
+<% if (!dash) { %>
+  <section class="guest-dash">
+    <div class="guest-dash__text">
+      <p class="eyebrow">Mi progreso</p>
+      <h1 class="h-page">Tu panel académico</h1>
+      <p class="lead"><%= site.profile.loggedOut %></p>
+      <ul class="feature-list feature-list--dark">
+        <li><span aria-hidden="true">📈</span><div><strong>Avance por curso y por área</strong>, con lo que te falta para terminar.</div></li>
+        <li><span aria-hidden="true">⚡</span><div><strong>Experiencia y niveles</strong> por cada paso y ejercicio.</div></li>
+        <li><span aria-hidden="true">🔥</span><div><strong>Racha y meta semanal</strong> que tú eliges.</div></li>
+        <li><span aria-hidden="true">🎯</span><div><strong>Recomendaciones</strong> según los temas donde más te cuesta.</div></li>
+      </ul>
+      <div class="profile__actions">
+        <a class="btn btn--lg" href="/login?next=/profile">Iniciar sesión</a>
+        <a class="btn btn--lg btn--ghost" href="/registro?next=/profile">Regístrate gratis</a>
+      </div>
+    </div>
+    <div class="guest-dash__media">
+      <img src="/img/mision.jpg" alt="Estudiante de ingeniería trabajando en su portátil" width="1024" height="1024" loading="lazy">
+    </div>
+  </section>
+<% } else { const d = dash; %>
+  <section class="dash">
+    <!-- Encabezado del panel -->
+    <header class="dash-head card">
+      <div class="dash-head__who">
+        <span class="avatar avatar--lg" aria-hidden="true"><%= d.member.first_name.charAt(0).toUpperCase() %></span>
+        <div>
+          <p class="eyebrow">Mi progreso</p>
+          <h1 class="dash-head__name"><%= d.member.first_name %> <%= d.member.last_name %></h1>
+          <p class="muted"><%= d.member.email %></p>
+        </div>
+      </div>
+      <div class="dash-head__level">
+        <div class="level-card">
+          <div class="level-card__badge" aria-hidden="true"><%= d.level.number %></div>
+          <div class="level-card__body">
+            <p><strong>Nivel <%= d.level.number %> · <%= d.level.name %></strong> <span class="muted"><%= d.xp %> XP</span></p>
+            <div class="progress progress--xp" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<%= d.level.pct %>" aria-label="Avance al siguiente nivel"><span style="width: <%= d.level.pct %>%"></span></div>
+            <p class="muted small"><%= d.level.next ? `${d.level.toNext} XP para ${d.level.nextName}` : '¡Nivel máximo!' %></p>
+          </div>
+        </div>
+      </div>
+      <form action="/api/auth/salir" method="post" class="dash-head__logout">
+        <button class="btn btn--ghost btn--small" type="submit">Cerrar sesión</button>
+      </form>
+    </header>
+
+    <!-- Indicadores (4, ley de Miller) -->
+    <ul class="kpis">
+      <li class="kpi"><span class="kpi__icon kpi__icon--teal" aria-hidden="true">✓</span><span class="kpi__value"><%= d.stats.steps %><small>/<%= d.stats.totalSteps %></small></span><span class="kpi__label">Pasos completados</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--blue" aria-hidden="true">∑</span><span class="kpi__value"><%= d.stats.correct %><small>/<%= d.stats.totalExercises %></small></span><span class="kpi__label">Ejercicios correctos</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--orange" aria-hidden="true">🔥</span><span class="kpi__value"><%= d.streak %></span><span class="kpi__label">Días de racha</span></li>
+      <li class="kpi"><span class="kpi__icon kpi__icon--purple" aria-hidden="true">★</span><span class="kpi__value"><%= d.stats.badges %><small>/<%= d.stats.totalBadges %></small></span><span class="kpi__label">Insignias y logros</span></li>
+    </ul>
+
+    <!-- Continuar y recomendación -->
+    <div class="dash-grid dash-grid--2">
+      <article class="card next-card">
+        <p class="eyebrow">Continúa donde quedaste</p>
+        <% if (d.resume && d.resume.nextStep) { %>
+          <h2 class="card__title"><%= d.resume.nextStep.title %></h2>
+          <p class="muted"><%= d.resume.area.name %> · <%= d.resume.progress.done %>/<%= d.resume.progress.total %> pasos</p>
+          <div class="progress"><span style="width:<%= d.resume.progress.percent %>%;background:<%= d.resume.area.color %>"></span></div>
+          <a class="btn" href="/p-gina-de-programas/<%= d.resume.program.id %>/participante?paso=<%= d.resume.nextStep.id %>">Continuar</a>
+        <% } else { %>
+          <h2 class="card__title">Elige tu primer curso</h2>
+          <p class="muted">Únete a un curso para empezar a sumar pasos y experiencia.</p>
+          <a class="btn" href="/challenges">Ver cursos</a>
+        <% } %>
+      </article>
+      <article class="card next-card next-card--rec">
+        <p class="eyebrow">Recomendado para ti</p>
+        <% if (d.recommendation) { const rec = d.recommendation; %>
+          <h2 class="card__title"><%= rec.topic.title %></h2>
+          <p class="muted"><%= rec.area.name %><%= d.settings.focusArea === rec.area.slug ? ' · tu área de interés' : ' · el área donde más puedes mejorar' %></p>
+          <div class="next-card__actions">
+            <% if (rec.topic.exercises.length) { %><a class="btn" href="/banco-de-ejercicios#<%= rec.topic.exercises[0] %>">Practicar este tema</a><% } %>
+            <a class="btn btn--ghost" href="<%= rec.area.page %>#<%= rec.topic.slug %>">Ver el tema</a>
+          </div>
+        <% } else { %>
+          <h2 class="card__title">¡Dominaste todas las áreas!</h2>
+          <p class="muted">Repasa cuando quieras o ayuda a un compañero.</p>
+        <% } %>
+      </article>
+    </div>
+
+    <!-- Cursos y actividad -->
+    <div class="dash-grid dash-grid--3">
+      <section class="card dash-courses">
+        <h2 class="card__title">Mis cursos</h2>
+        <ul class="ring-list">
+          <% d.courses.forEach(c => { %>
+            <li>
+              <a class="ring-item" href="/p-gina-de-programas/<%= c.program.id %><%= c.enrolled ? '/participante' : '' %>">
+                <span class="ring" style="--p:<%= c.progress.percent %>;--ring:<%= c.area.color %>"><span><%= c.progress.percent %>%</span></span>
+                <span class="ring-item__text"><strong><%= c.area.name %></strong><small><%= c.enrolled ? `${c.progress.done}/${c.progress.total} pasos` : 'Sin empezar · Únete' %></small></span>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+
+      <section class="card dash-week">
+        <h2 class="card__title">Actividad de la semana</h2>
+        <% if (d.weekTotal === 0) { %>
+          <div class="week-empty" data-week-empty>
+            <span class="week-empty__icon" aria-hidden="true">📅</span>
+            <p><strong>Aún no tienes actividad esta semana.</strong><br>Completa un paso de un curso o resuelve un ejercicio y aquí verás tu avance día a día.</p>
+            <div class="week-empty__actions">
+              <a class="btn btn--small" href="/challenges">Ir a mis cursos</a>
+              <a class="btn btn--small btn--ghost" href="/banco-de-ejercicios">Practicar ejercicios</a>
+            </div>
+          </div>
+        <% } else { %>
+          <% const max = Math.max(1, ...d.week.map(x => x.count)); %>
+          <div class="bars" role="img" aria-label="Actividades por día en los últimos 7 días: <%= d.week.map(x => `${x.label} ${x.count}`).join(', ') %>">
+            <% d.week.forEach(x => { %>
+              <div class="bars__col<%= x.today ? ' is-today' : '' %>">
+                <span class="bars__value"><%= x.count || '' %></span>
+                <span class="bars__bar" style="height: <%= Math.max(4, Math.round(x.count / max * 100)) %>%"></span>
+                <span class="bars__label"><%= x.label %></span>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+        <% const goalPct = Math.min(100, Math.round(d.weekTotal / d.settings.weeklyGoal * 100)); %>
+        <div class="goal">
+          <p><strong>Meta semanal:</strong> <%= d.weekTotal %> de <%= d.settings.weeklyGoal %> actividades <%= goalPct >= 100 ? '🎉' : '' %></p>
+          <div class="progress"><span style="width:<%= goalPct %>%;background:#C2410C"></span></div>
+        </div>
+      </section>
+
+      <section class="card dash-mastery">
+        <h2 class="card__title">Dominio por área</h2>
+        <ul class="mastery">
+          <% d.mastery.forEach(m => { %>
+            <li>
+              <div class="mastery__row"><a href="<%= m.area.page %>"><%= m.area.name %></a><span><%= m.pct %>%</span></div>
+              <div class="progress"><span style="width:<%= m.pct %>%;background:<%= m.area.color %>"></span></div>
+              <ul class="mastery__topics">
+                <% m.topics.filter(t => t.pct !== null).forEach(t => { %>
+                  <li class="<%= t.pct === 100 ? 'is-done' : (t.pct > 0 ? 'is-mid' : '') %>" title="<%= t.title %>: <%= t.pct %>%"><%= t.title %></li>
+                <% }) %>
+              </ul>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Logros -->
+    <section class="card">
+      <div class="card__head">
+        <h2 class="card__title">Insignias y logros</h2>
+        <span class="muted"><%= d.stats.badges %> de <%= d.stats.totalBadges %> desbloqueados</span>
+      </div>
+      <ul class="achievements">
+        <% d.badges.forEach(b => { %>
+          <li class="achievement<%= b.earned ? ' is-earned' : '' %>" style="--badge-bg:<%= b.backgroundColor %>">
+            <span class="achievement__icon" aria-hidden="true">★</span>
+            <strong><%= b.title %></strong>
+            <small><%= b.earned ? b.description : b.hint %></small>
+          </li>
+        <% }) %>
+        <% d.achievements.forEach(a => { %>
+          <li class="achievement<%= a.earned ? ' is-earned' : '' %>" style="--badge-bg:#C2410C">
+            <span class="achievement__icon" aria-hidden="true"><%= { 'primer-paso': '👣', practicante: '✎', 'racha-3': '🔥', explorador: '🧭', meta: '🎯' }[a.id] %></span>
+            <strong><%= a.title %></strong>
+            <small><%= a.earned ? a.description : a.hint %></small>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <!-- Personalización -->
+    <section class="card" id="ajustes">
+      <h2 class="card__title">Personaliza tu panel</h2>
+      <% if (saved) { %><p class="notice" role="status">✓ Guardamos tus preferencias.</p><% } %>
+      <form class="settings" action="/api/perfil/ajustes" method="post">
+        <fieldset class="settings__group">
+          <legend>Meta semanal de actividades</legend>
+          <div class="segmented">
+            <% goals.forEach(g => { %>
+              <label><input type="radio" name="weeklyGoal" value="<%= g %>"<%= d.settings.weeklyGoal === g ? ' checked' : '' %>><span><%= g %></span></label>
+            <% }) %>
+          </div>
+          <p class="muted small">Cuenta cada paso completado y cada ejercicio respondido.</p>
+        </fieldset>
+        <div class="settings__group">
+          <label for="focus">¿Qué área quieres priorizar?</label>
+          <select id="focus" name="focusArea">
+            <option value="">La que más necesite (automático)</option>
+            <% areas.filter(a => !a.soon).forEach(a => { %><option value="<%= a.slug %>"<%= d.settings.focusArea === a.slug ? ' selected' : '' %>><%= a.name %></option><% }) %>
+          </select>
+        </div>
+        <button class="btn" type="submit">Guardar preferencias</button>
+      </form>
+    </section>
+  </section>
+<% } %>
+<%- include('../partials/bottom') %>

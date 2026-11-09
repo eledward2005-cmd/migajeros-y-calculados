@@ -1,0 +1,47 @@
+  </main>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="footer-logo" href="/" aria-label="Migajeros y Calculados — Inicio">
+          <img src="/img/logo.png" alt="Migajeros-y-Calculados-logo" width="130" height="50">
+        </a>
+        <p><%= site.tagline %></p>
+        <a class="footer-mail" href="mailto:<%= site.email %>"><%= site.email %></a>
+      </div>
+      <nav class="footer-col" aria-label="Pie de página">
+        <h2 class="footer-h">Navegación</h2>
+        <ul>
+          <% site.nav.forEach(item => { %><li><a href="<%= item.href %>" class="<%= item.key === active ? 'is-current' : '' %>"><%= item.label %></a></li><% }) %>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h2 class="footer-h">Áreas de estudio</h2>
+        <ul>
+          <li><a href="/matematica">Cálculo</a></li>
+          <li><a href="/algebra-lineal">Álgebra Lineal</a></li>
+          <li><a href="/fisica">Física</a></li>
+          <li><a href="/banco-de-ejercicios">Banco de ejercicios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2 class="footer-h">Tu cuenta</h2>
+        <ul>
+          <% if (member) { %>
+            <li><a href="/profile">Mi panel</a></li>
+            <li><form action="/api/auth/salir" method="post"><button class="footer-linkbtn" type="submit">Cerrar sesión</button></form></li>
+          <% } else { %>
+            <li><a href="/login">Iniciar sesión</a></li>
+            <li><a href="/registro">Regístrate</a></li>
+          <% } %>
+          <li><a href="/ayudas-ucc#duda">¿Tienes una duda?</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p><%= site.copyright %></p>
+      <p><%= site.tagline %></p>
+    </div>
+  </footer>
+  <script src="/js/main.js?v=<%= assetV.js %>" defer></script>
+</body>
+</html>

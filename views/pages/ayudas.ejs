@@ -1,0 +1,93 @@
+<%- include('../partials/top') %>
+<% const a = site.ayudas; %>
+<section class="page-hero">
+  <div class="page-hero__inner">
+    <nav class="breadcrumbs" aria-label="Ruta"><a href="/">Inicio</a><span aria-hidden="true">›</span><span aria-current="page">Ayudas UCC</span></nav>
+    <div class="page-hero__grid">
+      <div>
+        <h1 class="h-page"><%= a.title %></h1>
+        <p class="lead"><%= a.text %></p>
+        <div class="hero__actions">
+          <a class="btn btn--lg" href="#duda">Hacer una pregunta</a>
+          <a class="btn btn--lg btn--ghost" href="#recursos">Ver recursos</a>
+        </div>
+      </div>
+      <img class="page-hero__img" src="/img/tutorias.jpg" alt="Docente resolviendo dudas con un estudiante" width="1400" height="613">
+    </div>
+  </div>
+</section>
+<section class="resources section" id="recursos">
+  <h2 class="h-section"><%= a.resourcesTitle %></h2>
+  <div class="resource-cards">
+    <% a.resources.forEach(r => { %>
+      <article class="resource-card">
+        <img src="<%= r.img %>" alt="" width="602" height="219" loading="lazy">
+        <h3 class="resource-card__title<%= r.highlight ? ' is-highlight' : '' %>"><%= r.title %></h3>
+        <p><%= r.text %></p>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<section class="ayudas-info section section--tint">
+  <div class="ayudas-info__text">
+    <h2 class="h-section">¿Qué ayuda elegir?</h2>
+    <ul class="bullets">
+      <% a.list.forEach(l => { %><li><strong><%= l.label %></strong> <%= l.text %></li><% }) %>
+    </ul>
+    <p class="soon-note"><em><%= a.soon %></em></p>
+  </div>
+  <img class="ayudas-info__img" src="/img/bienestar.jpg" alt="Estudiantes en el campus" width="1400" height="613" loading="lazy">
+</section>
+
+<section class="question section" id="duda">
+  <div class="question__intro">
+    <h2 class="h-section question__title"><%= a.formTitle %></h2>
+    <p class="question__text"><%= a.formText %></p>
+    <ul class="question__tips">
+      <li>Di en qué tema te quedaste y qué ya intentaste.</li>
+      <li>Usa tu correo institucional para recibir la respuesta.</li>
+      <li>Si es urgente, pide una monitoría o tutoría.</li>
+    </ul>
+  </div>
+
+  <form class="qform" action="/api/preguntas" method="post" novalidate data-ajax>
+    <div class="qform__row">
+      <div class="qfield">
+        <label for="f-nombre">Nombre <span aria-hidden="true">*</span></label>
+        <input id="f-nombre" name="firstName" type="text" required maxlength="100" autocomplete="given-name" value="<%= member ? member.first_name : '' %>">
+        <p class="qfield__error" data-error-for="firstName"></p>
+      </div>
+      <div class="qfield">
+        <label for="f-apellido">Apellido <span aria-hidden="true">*</span></label>
+        <input id="f-apellido" name="lastName" type="text" required maxlength="100" autocomplete="family-name" value="<%= member ? member.last_name : '' %>">
+        <p class="qfield__error" data-error-for="lastName"></p>
+      </div>
+    </div>
+    <div class="qfield">
+      <label for="f-correo">Correo institucional <span aria-hidden="true">*</span></label>
+      <input id="f-correo" name="email" type="email" required maxlength="255" autocomplete="email" value="<%= member ? member.email : '' %>">
+      <p class="qfield__error" data-error-for="email"></p>
+    </div>
+    <div class="qfield qfield--select">
+      <label for="f-materia">Materia <span aria-hidden="true">*</span></label>
+      <select id="f-materia" name="subject" required>
+        <option value="" selected disabled hidden></option>
+        <% a.subjects.forEach(s => { %><option value="<%= s %>"><%= s %></option><% }) %>
+      </select>
+      <p class="qfield__error" data-error-for="subject"></p>
+    </div>
+    <div class="qfield">
+      <label for="f-tema">Tema</label>
+      <input id="f-tema" name="topic" type="text" maxlength="200">
+    </div>
+    <div class="qfield">
+      <label for="f-pregunta">Tu pregunta <span aria-hidden="true">*</span></label>
+      <textarea id="f-pregunta" name="question" rows="3" required maxlength="5000"></textarea>
+      <p class="qfield__error" data-error-for="question"></p>
+    </div>
+    <button class="qform__submit" type="submit">Enviar pregunta</button>
+    <p class="qform__status" role="status" aria-live="polite"><%= sent ? '¡Gracias! Recibimos tu pregunta.' : '' %></p>
+  </form>
+</section>
+<%- include('../partials/bottom') %>

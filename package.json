@@ -1,0 +1,25 @@
+{
+  "name": "migajeros-y-calculados",
+  "version": "1.0.0",
+  "description": "Plataforma de apoyo académico en ciencias básicas (UCC Bogotá). Reconstrucción independiente del sitio publicado en Wix.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "dev": "node --no-warnings --watch server.js",
+    "db:init": "node --no-warnings scripts/init-db.js",
+    "test": "node --no-warnings scripts/smoke-test.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  },
+  "optionalDependencies": {
+    "mssql": "^11.0.1"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
